@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Entropy Checker</title>
+    <style>
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .weak {
+            color: red;
+        }
+        .good {
+            color: blue;
+        }
+        .great {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Entropy Checker</h1>
+        <label for="password">Password:</label>
+        <input type="text" id="password" onkeyup="checkPasswordEntropy()">
+        <p id="entropy">Password strength: <span id="strength" class="weak">Weak</span></p>
+        <p id="entropy-value">Total bits: 0 bits</p>
+        <button onclick="clearPassword()">Clear</button>
+        <button onclick="copyPassword()">Copy</button>
+    </div>
+
+    <script>
+        function calculateEntropy(password) {
+            const charsetSize = 94; // ASCII printable characters (33-126)
+            const passwordLength = password.length;
+
+            if (passwordLength === 0) {
+                return 0;
+            }
+
+            let entropy = 0;
+            for (let i = 0; i < passwordLength; i++) {
+                entropy += Math.log2(charsetSize);
+            }
+
+            return entropy.toFixed(2);
+        }
+
+        function checkPasswordEntropy() {
+            const passwordInput = document.getElementById("password");
+            const strengthElement = document.getElementById("strength");
+            const entropyValueElement = document.getElementById("entropy-value");
+            const password = passwordInput.value;
+
+            const entropy = calculateEntropy(password);
+
+            entropyValueElement.textContent = `Total bits: ${entropy} bits`;
+
+            if (entropy < 50) {
+                strengthElement.textContent = "Weak";
+                strengthElement.className = "weak";
+            } else if (entropy >= 50.1 && entropy <= 65) {
+                strengthElement.textContent = "Good";
+                strengthElement.className = "good";
+            } else {
+                strengthElement.textContent = "Great";
+                strengthElement.className = "great";
+            }
+        }
+
+        function clearPassword() {
+            const passwordInput = document.getElementById("password");
+            passwordInput.value = "";
+        }
+
+        function copyPassword() {
+            const passwordInput = document.getElementById("password");
+            passwordInput.select();
+            document.execCommand("copy");
+        }
+    </script>
+</body>
+</html>
+
+
+<!--https://gegcalculators.com/password-entropy-calculator/-->
+
