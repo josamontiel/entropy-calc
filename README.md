@@ -1,4 +1,4 @@
-
+(***A purely educational tool***)
 
 # Password Entropy and Password Security
 
